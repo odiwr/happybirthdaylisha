@@ -1,0 +1,636 @@
+<html>
+  <head>
+    <title>Windows 98</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <link rel="icon" type="image/png" href="https://images.emojiterra.com/microsoft/fluent-emoji/512px/2764_flat.png">
+    <style>
+
+/* Disable image filtering */
+img { 
+    image-rendering: optimizeSpeed;             /* STOP SMOOTHING, GIVE ME SPEED  */
+    image-rendering: -moz-crisp-edges;          /* Firefox                        */
+    image-rendering: -o-crisp-edges;            /* Opera                          */
+    image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
+    image-rendering: pixelated;                 /* Chrome */
+    image-rendering: optimize-contrast;         /* CSS3 Proposed                  */
+    -ms-interpolation-mode: nearest-neighbor;   /* IE8+                           */
+}
+
+/* bugfix */
+button:not(:disabled):active { padding-top: 0px; }
+button { color: black; }
+
+/*** Menus ***/
+
+/* Menus are defined by a "ul" element with the "menu" class. Adding the
+ * "bar" class makes the menu horizontal. A "div" child with the
+ * "window" class inside of a "li" in a menu will be a popup. */
+
+ul.menu {
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none; /* disable bullets */
+}
+
+/* popup menu window */
+ul.menu > li > div.window {
+    position: absolute;
+    display: none;
+    top: 0px; left: 100%;  /* display to the right of the parent "li" */
+}
+ul.bar > li > div.window {
+    top: 100%; left: 0px;  /* display under the parent "li" */
+}
+ul.menu > li:hover > div.window {
+    display: block;  /* display popup when parent "li" is hovered */
+}
+
+/* menu item */
+ul.menu > li {
+    position: relative;
+    color: black;
+    padding: 2px;
+    line-height: 16px;  /* make sure text occupies the same vertical space as a 16x16 icon */
+}
+ul.bar > li {
+    display: inline;  /* menu bars display horizontally */
+}
+ul.menu > li:hover {
+    background-color: #000080; color: white;  /* hovered menu item color */
+}
+
+/* menu separator */
+hr {
+    margin: 2px;
+    border-top: 1px solid #808080;
+    border-bottom: 1px solid #FFFFFF;
+}
+
+/* submenu arrow */
+li.arrow::after { float: right; content: "▶"; }
+
+/* keyboard shortcut */
+ul.menu > li > span.keyshortcut { float: right; }
+
+/* menu item icon */
+ul.menu > li > img {
+    width: 16px; height: 16px;
+    vertical-align: middle;  /* seems to be off by 1 pixel? */
+    padding-right: 4px;
+}
+ul.menu > li > img:not([src]) {
+    visibility: hidden;
+}
+
+/* Don't use flex layout on title bar */
+div.title-bar { display: block; padding: 1px; }
+div.title-bar * { display: inline; vertical-align: middle; }  /* make everything horizontal */
+div.title-bar-text { vertical-align: middle; line-height: 16px; padding: 1px; }
+div.title-bar-controls { float: right; padding: 1px; }
+div.title-bar img { padding-right: 5px; }
+
+div.deskicon {
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    color: white;
+    font-family: "Pixelated MS Sans Serif", Arial;
+    -webkit-font-smoothing: none;
+    font-size: 11px;
+}
+div.deskicon > img {
+    padding: 4px;
+}
+
+/* make icons vertically centered in text */
+button img {
+    vertical-align: middle;
+}
+
+button.pushed {
+    box-shadow: inset -1px -1px #FFFFFF, inset 1px 1px #0A0A0A, inset -2px -2px #DFDFDF, inset 2px 2px #808080;
+}
+
+button.taskbtn, button.taskbtn:active {
+    box-sizing: border-box;
+    height: 22px;
+    width: 100px;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+button.taskbtn > img {
+    margin-right: 5px;
+}
+button.taskbtn.pushed {
+    font-weight: bold;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAAAAABX3VL4AAAACXBIWXMAAAsTAAALEwEAmpwYAAAADklEQVQIHWPY+5/h/14ACm4DeZxCDIkAAAAASUVORK5CYII=");
+}
+
+/*** element specific rules ***/
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+body {
+    position: relative;
+    background-color: #008080;
+    margin: 0px;
+    padding: 0px;
+    user-select: none; -ms-user-select: none;
+    cursor: url("https://windows93.net/c/sys/cursors/default.cur"), default;  /* lol, windows 93 */
+}
+
+/* Start Menu */
+#startMenu div.window {
+    width: 150px;
+}
+#startMenu > ul > li {
+    padding: 0px;
+}
+#startMenu > ul > li > img {
+    width: 32px; height: 32px;
+}
+
+#startBtn.pushed {
+    box-shadow: inset -1px -1px #FFFFFF, inset 1px 1px #0A0A0A, inset -2px -2px #DFDFDF, inset 2px 2px #808080;
+    padding: 2px 11px 0 13px;
+}
+
+#notificationArea {
+    float: right;
+    height: 22px;
+    margin-right: 4px;
+    padding: 4px;
+    box-sizing: border-box;
+    box-shadow: inset -1px -1px #FFFFFF, inset 1px 1px #808080;
+}
+    </style>
+  </head>
+
+  <body>
+
+    <!--Icons-->
+    <div class="deskicon">
+      <img src="https://win98icons.alexmeub.com/icons/png/computer_explorer-3.png"><br>My Computer
+    </div>
+    <div class="deskicon">
+      <img src="https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs_small-4.png"><br>My Documents
+    </div>
+    <div class="deskicon">
+      <img src="https://win98icons.alexmeub.com/icons/png/network_normal_two_pcs-2.png"><br>Network Neighborhood
+    </div>
+    <div class="deskicon">
+      <img src="https://win98icons.alexmeub.com/icons/png/recycle_bin_empty-2.png"><br>Recycle Bin
+    </div>
+    <div class="deskicon" onclick="openApp(notepad)">
+      <img src="https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs_small-4.png"><br>Notepad
+    </div>
+
+    <!--Run Dialog-->
+    <div id="run" class="toplevel window" style="position:absolute; display:none; width:340px; top:50px; left:20px;">
+      <div class="title-bar">
+        <div class="title-bar-text">Run</div>
+        <div class="title-bar-controls">
+          <button aria-label="Help"></button><button aria-label="Close"></button>
+        </div>
+      </div>
+      <div class="window-body">
+        <p>
+          <img src="https://win98icons.alexmeub.com/icons/png/application_hourglass-0.png" style="margin-right:10px; float:left">
+          Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.
+        </p>
+        <div>
+          Open:<select style="width:270px; margin-left:10px"></select>
+        </div>
+        <div style="margin:10px; text-align:right">
+          <button>OK</button>
+          <button>Cancel</button>
+          <button>Browse</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notepad -->
+    <div id="notepad" class="toplevel window" style="position:absolute; display:none;">
+      <div class="title-bar">
+        <img src="https://win98icons.alexmeub.com/icons/png/notepad-3.png">
+        <div class="title-bar-text">Notepad</div>
+        <div class="title-bar-controls">
+          <button aria-label="Minimize"></button><button aria-label="Maximize"> </button><button aria-label="Close"></button>
+        </div>
+      </div>
+      <ul class="menu bar">
+        <li>
+          File
+          <div class="window" style="width:120px">
+            <ul class="menu">
+              <li><img>New<span class="keyshortcut">Ctrl+N</span></li>
+              <li><img>Open...<span class="keyshortcut">Ctrl+O</span></li>
+              <li><img>Save<span class="keyshortcut">Ctrl+S</span></li>
+              <li><img>Save As...</li>
+              <hr>
+              <li><img>Print...<span class="keyshortcut">Ctrl+P</span></li>
+              <hr>
+              <li><img>Exit</li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          Help
+          <div class="window" style="width:100px">
+            <ul class="menu">
+              <li><img>Contents<span class="keyshortcut">F1</span></li>
+              <li><img>About Notepad</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+      <div class="window-body" style="margin:0px;">
+        <textarea style="width: 100%; height:200px;"></textarea>
+      </div>
+    </div>
+
+    <!-- taskbar -->
+    <div id="taskbar" class="window" style="position:absolute; height:23px; width:100%; left:-2px; bottom:-2px; padding:4px; z-index:1000">
+
+        <button id="startBtn" style="min-width:54px; box-sizing:border-box; height:22px; padding-left:4px; text-align:left; font-weight:bold">
+          <img src="https://win98icons.alexmeub.com/icons/png/windows-4.png">
+          Start
+        </button>
+
+        <!-- Start Menu -->
+        <div id="startMenu" class="window" style="position:absolute; bottom:28px; width:202px; display:none">
+          <img style="position:absolute; bottom:3px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAABpBAMAAAAn2XUfAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAD1BMVEUAAHsAAP97fXu9vr3///++vaitAAAB7klEQVQ4y31TgZGjMAyUCAVYhAKw4wISTAFgq/+abiXDX/7vc54B1stqJbBE5Ovx7M9Rn6Nqx43qtoz+YthprHTbLwzwhocfmJT00lPWOsZtcTyUcNMW6FrTcoFSnid9U6yznrzm5dHr4cZUw7hDxcjCmaYrL83Eh7scTDkOOxMFblbGzXnaaq68LeCZBtVIqycLgaPdTE/2cqt08g3/QVxP9zar7lCAH4Hz4f40H3ObrR5sckWKA5oQAtTH5nUy42Oq7mKhgZEYqS1TuKdFVvMPwqOuQSAwHrEaoTWeH9hYLviwbKghuP9dT95jVV9ssUFmCxUOhGuCvC2eV1iy6cELT9liTc+ey4LNB7iJQC9BxhYl9BpkmjbsBLEwMs+Lt9jovLiPeUI3N0Qc4pr58OvUxKiO5dRbrncfrM2L6Bgb6TilR0pr16j22N9werSULs/vGixvnP6p4Qd2pz81lBIvnEspr47vH2L/xm7Q9e0N/1fPn3xY5IzFqX/zb/gjL6mH4nx50vbyRrBcEPiRgpeifWd9Jb6zPkFv+GH3s/OW8X6j/p9Xr8dOrpiN6YFrRJeaT+ka54Vhc/Y/eVPuzhvqPUPeAdqePlOGXl6z8cmePkcp+CcF3+CyaaI+bZheplNnjM9sp01qA0w+o/QFntuBDzkP6qsAAAAASUVORK5CYII=">
+          <ul class="menu" style="border-left:21px solid #000080">
+            <li><img src="https://win98icons.alexmeub.com/icons/png/windows_update_large-4.png">Windows Update</li>
+            <hr>
+            <li class="arrow">
+              <!-- not the correct icon" -->
+              <img src="https://win98icons.alexmeub.com/icons/png/file_program_group-0.png">
+              Programs
+              <div class="window">
+                <ul class="menu">
+                  <li class="arrow">
+                    <!-- not the correct icon -->
+                    <img src="https://win98icons.alexmeub.com/icons/png/directory_closed-1.png">
+                    Accessories
+                    <div class="window">
+                      <ul class="menu">
+                        <li><img src="https://win98icons.alexmeub.com/icons/png/calculator-1.png">Calculator</li>
+                        <li onclick="openApp(notepad)"><img src="https://win98icons.alexmeub.com/icons/png/notepad-3.png">Notepad</li>
+                      </ul>
+                    </div>
+                  </li>
+                  <!-- not the correct icon -->
+                  <li class="arrow"><img src="https://win98icons.alexmeub.com/icons/png/directory_closed-1.png">StartUp</li>
+                  <li><img src="https://win98icons.alexmeub.com/icons/png/ms_dos-1.png" style="height:16px">MS-DOS Prompt</li>
+                </ul>
+              </div>
+            </li>
+            <li class="arrow">
+              <img src="https://win98icons.alexmeub.com/icons/png/directory_favorites_small-2.png">
+              Favorites
+              <div class="window">
+                <ul class="menu">
+                  <li><img src="https://win98icons.alexmeub.com/icons/png/html2-4.png">Google</li>
+                  <li><img src="https://win98icons.alexmeub.com/icons/png/html2-4.png">Yahoo</li>
+                  <li><img src="https://win98icons.alexmeub.com/icons/png/html2-4.png">MSN</li>
+                </ul>
+              </div>
+            </li>
+            <li class="arrow"><img src="https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs_small-3.png">Documents</li>
+            <li class="arrow">
+              <img src="https://win98icons.alexmeub.com/icons/png/settings_gear-3.png">
+              Settings
+              <div class="window">
+                <ul class="menu">
+                  <li><img src="https://win98icons.alexmeub.com/icons/png/directory_control_panel-1.png">Control Panel</li>
+                  <!-- not the right icon, but close -->
+                  <li><img src="https://win98icons.alexmeub.com/icons/png/directory_business_calendar-5.png">Printers</li>
+                  <li><img src="https://win98icons.alexmeub.com/icons/png/windows_button-1.png">Taskbar &amp; Start Menu</li>
+                  <li><img><!--img src="https://win98icons.alexmeub.com/icons/png/directory_explorer-3.png"-->Folder Options</li>
+                  <li><img src="https://win98icons.alexmeub.com/icons/png/desktop_old-4.png">Active Desktop</li>
+                  <hr>
+                  <li><img src="https://win98icons.alexmeub.com/icons/png/windows_update_large-3.png">Windows Update</li>
+                </ul>
+              </div>
+            </li>
+            <li class="arrow"><img src="https://win98icons.alexmeub.com/icons/png/search_file_2-3.png">Find</li>
+            <li><img src="https://win98icons.alexmeub.com/icons/png/help_book_small-3.png">Help</li>
+            <li onclick="openApp(run)"><img src="https://win98icons.alexmeub.com/icons/png/application_hourglass_small-3.png">Run</li>
+            <hr>
+            <li><img src="https://win98icons.alexmeub.com/icons/png/key_win-3.png">Log Off</li>
+            <li><img src="https://win98icons.alexmeub.com/icons/png/shut_down_with_computer-0.png">Shut Down</li>
+          </ul>
+        </div>
+
+        <div id="taskBtnList" style="display:inline"></div>
+
+        <span id="notificationArea">
+          <span id="clock"></span>
+        </span>
+    </div>
+
+    <!-- window menu -->
+    <div class="window" style="position:absolute; display:none">
+      <ul class="menu">
+        <li><img>Restore</li>
+        <li><img>Move</li>
+        <li><img>Size</li>
+        <li><img>Minimize</li>
+        <li><img>Maximize</li>
+        <hr>
+        <li><img>Close</li>
+      </ul>
+    </div>
+
+  </body>
+  <script src="https://polyfill.io/v3/polyfill.js?features=Array.prototype.indexOf|always"></script>
+  <script>
+/* Old IE polyfills */
+if (!document.getElementsByClassName) {
+    document.getElementsByClassName = function(cl) {
+        var retnode = [];
+        var elem = this.getElementsByTagName('*');
+        for (var i = 0; i < elem.length; i++) {
+            if((' ' + elem[i].className + ' ').indexOf(' ' + cl + ' ') > -1) retnode.push(elem[i]);
+        }
+        return retnode;
+    };
+}
+if (!Event.prototype.stopPropagation) {
+    Event.prototype.stopPropagation=function() {
+        this.cancelBubble=true;
+    };
+}
+if (window.NodeList && !NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = function (callback, thisArg) {
+        thisArg = thisArg || window;
+        for (var i = 0; i < this.length; i++) {
+            callback.call(thisArg, this[i], i, this);
+        }
+    };
+}
+
+topZ = 100;
+
+function hasClass(elem, className) {
+    if (typeof(elem.className) === "string") {
+        var classes = elem.className.split(" ");
+        for (var i = 0; i < classes.length; i++)
+            if (classes[i] === className)
+                return true;
+    }
+    return false;
+}
+function deleteNode(node) {
+   node.parentNode.removeChild(node);
+}
+
+function showWindowMenu(win, widget) {
+
+}
+
+var topLevelWindows = [];
+var windowId = 0;
+function Window(template) {
+  var win = this;
+  var elem = template.cloneNode(true);
+  elem.id = template.id + windowId++;
+  // TODO: make sure child ids are unique.
+  document.body.appendChild(elem);
+  this.elem = elem;
+
+  // find title bar
+  elem.childNodes.forEach(
+      function(n) { if (hasClass(n, "title-bar")) this.titleBar = n; },
+      this);
+  // find window icon and buttons
+  if (this.titleBar) {
+      this.titleBar.childNodes.forEach(
+          function(n) {
+              if (n.nodeName === "IMG")
+                  this.icon = n;
+              else if (n.className === "title-bar-controls")
+                  n.childNodes.forEach(
+                      function(n) {
+                          if (n.nodeName === "BUTTON")
+                              switch (n.getAttribute("aria-label")) {
+                              case "Maximize": this.maxBtn = n; break;
+                              case "Minimize": this.minBtn = n; break;
+                              case "Close": this.closeBtn = n; break;
+                              case "Help": this.helpBtn = n; break;
+                              }
+                      },
+                      this);
+          },
+          this);
+  }
+
+  // methods
+  this.open = function() {
+      elem.style.display = "";
+      // create task button
+      this.taskBtn = document.createElement("button");
+      this.taskBtn.className = "taskbtn";
+      this.taskBtn.innerText = this.titleBar.innerText;
+      this.taskBtn.onclick = function() {
+          if (win.isMinimized) {
+              win.activate();
+              win.restore();
+              return;
+          }
+          if (win.isActive && win.minBtn)
+              win.minimize();
+          else
+              win.activate();
+      };
+      taskBtnList.appendChild(this.taskBtn);
+      this.activate();
+  };
+  this.close = function() {
+      console.log("closing "+win);
+      deleteNode(win.elem);
+      deleteNode(win.taskBtn);
+      topLevelWindows.splice(topLevelWindows.indexOf(win), 1);
+  };
+  this.maximize = function() {
+      if (win.isMinimized) {
+          win.isMinimized = false;
+          elem.style.display = "";
+      }
+      win.prevLeft = elem.style.left;
+      win.prevTop = elem.style.top;
+      win.prevWidth = elem.style.width;
+      win.prevHeight = elem.style.height;
+      elem.style.top = "0px";
+      elem.style.left = "0px";
+      elem.style.width = "100%";
+      elem.style.height = "100%";
+      win.maxBtn.setAttribute("aria-label", "Restore");
+      win.isMaximized = true;
+  };
+  this.restore = function() {
+      if (win.isMinimized) {
+          win.isMinimized = false;
+          elem.style.display = "";
+          return;
+      }
+      elem.style.left = win.prevLeft;
+      elem.style.top = win.prevTop;
+      elem.style.width = win.prevWidth;
+      elem.style.height = win.prevHeight;
+      win.maxBtn.setAttribute("aria-label", "Maximize");
+      win.isMaximized = false;
+  };
+  this.minimize = function() {
+      elem.style.display = "none";
+      win.deactivate();
+      win.isMinimized = true;
+  };
+  this.activate = function() {
+      topLevelWindows.forEach(function(w) { w.deactivate(); }, this);
+      win.titleBar.className = "title-bar";
+      win.taskBtn.className = "taskbtn pushed";
+      win.elem.style.zIndex = topZ++;
+      win.isActive = true;
+  };
+  this.deactivate = function() {
+      win.titleBar.className = "title-bar inactive";
+      win.taskBtn.className = "taskbtn";
+      win.isActive = false;
+  };
+
+  this.isActive = this.isMaximized = this.isMinimized = false;
+
+  elem.onclick = win.activate;
+
+  // caption button handlers
+  if (this.closeBtn)
+      this.closeBtn.onclick = this.close;
+  if (this.maxBtn)
+      this.maxBtn.onclick = this.titleBar.ondblclick = function() {
+          (win.isMaximized ? win.restore : win.maximize)();
+      };
+  if (this.minBtn)
+      this.minBtn.onclick = this.minimize;
+  if (this.icon)
+      this.icon.onclick = function() {};
+
+  console.log("created window");
+  console.log("window");
+  console.log(this.elem);
+  console.log("titleBar");
+  console.log(this.titleBar);
+  addSizeHandleEvents(this, this.titleBar, 0, 0);
+  topLevelWindows.push(this);
+}
+
+function openApp(winElem) {
+    new Window(winElem).open();
+}
+
+startBtn.onclick = function(event) {
+    startMenu.style.display = startMenu.style.display ? "" : "none";
+    startBtn.className = startMenu.style.display === "none" ? "" : "pushed";
+}
+
+function updateClock() {
+    var d = new Date();
+    var h = d.getHours() % 12;
+    var m = d.getMinutes();
+    var a = d.getHours() < 12 ? "AM" : "PM";
+    if (h == 0)
+        h = 12;
+    clock.innerHTML = h + ":" + (m < 10 ? "0" : "") + m + " " + a;
+    setTimeout(updateClock, 1000);
+}
+updateClock();
+
+function addSizeHandleEvents(winObj, h, resizeX, resizeY) {
+  h.onmousedown = h.ontouchstart = function(e) {
+    var win = winObj.elem;
+    if (winObj.isMaximized)
+        return;
+    e = e || window.event;
+    var startRect = win.getBoundingClientRect();
+    var startX = startRect.left;
+    var startY = startRect.top;
+    var startWidth = startRect.right - startX;
+    var startHeight = startRect.bottom - startY;
+
+    var mouseStartX = e.clientX || e.touches[0].clientX;
+    var mouseStartY = e.clientY || e.touches[0].clientY;
+    winObj.activate();
+    document.onmousemove = document.ontouchmove = function(e) {
+      e = e || window.event;
+      var dx = (e.clientX || e.touches[0].clientX) - mouseStartX;
+      var dy = (e.clientY || e.touches[0].clientY) - mouseStartY;
+      if (resizeX < 0) {
+        win.style.left = startX + dx + "px";
+        win.style.width = startWidth - dx + "px";
+      }
+      if (resizeX > 0)
+        win.style.width = startWidth + dx + "px";
+      if (resizeY < 0) {
+        win.style.top = startY + dy + "px";
+        win.style.height = startHeight - dy + "px";
+      }
+      if (resizeY > 0)
+        win.style.height = startHeight + dy + "px";
+      if (resizeX == 0 && resizeY == 0) {
+        win.style.left = startX + dx + "px";
+        win.style.top = startY + dy + "px";
+      }
+    };
+    document.onmouseup = document.ontouchend = function(e) {
+      document.onmousemove = document.ontouchmove = null;
+      document.onmouseup = document.ontouchend = null;
+    };
+  }
+}
+function makeResizable(win) {
+  win.style.boxSizing = "border-box";
+  for (var x = -1; x <= 1; x++) {
+    for (var y = -1; y <= 1; y++) {
+      if ((x | y) == 0)
+        continue;
+      var h = document.createElement("div");
+      h.style.position = "absolute";
+      h.style.width = (x == 0) ? "100%" : "4px";
+      h.style.height = (y == 0) ? "100%" : "4px";
+      if (x != 1) h.style.left = "0px";
+      if (x != -1) h.style.right = "0px";
+      if (y != 1) h.style.top = "0px";
+      if (y != -1) h.style.bottom = "0px";
+      if (y != 0) h.style.cursor = "ns-resize";
+      if (x != 0) h.style.cursor = "ew-resize";
+      if (x*y == 1) h.style.cursor = "nwse-resize";
+      if (x*y == -1) h.style.cursor = "nesw-resize";
+      if ((x & y) != 0)
+        h.style.zIndex = 1;
+      addSizeHandleEvents(h, x, y);
+      win.appendChild(h);
+    }
+  }
+}
+
+// I would like to go full screen automatically, but browsers don't allow that.
+/*
+document.onclick = function(e) {
+    var isFullScreen = (document.fullScreenElement && document.fullScreenElement !== null)
+                    || (document.mozFullScreen || document.webkitIsFullScreen);
+    if (!isFullScreen) {
+        var docElem = document.documentElement;
+        if (docElem.requestFullscreen)
+            docElem.requestFullscreen();
+    }
+    hide(startMenu);
+}
+*/
+  </script>
+</html>

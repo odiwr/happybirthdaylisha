@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAKE!!</title>
+  <link rel="icon" type="image/png" href="https://images.emojiterra.com/microsoft/fluent-emoji/512px/2764_flat.png">
+  <style>
+    * {
+      touch-action: manipulation;
+    }
+
+    /* General body style */
+    body {
+      background-color: #C0C0C0;
+      font-family: W95;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      touch-action: manipulation;
+    }
+
+    @font-face {
+      font-family: W95;
+      src: url(W95FA.otf);
+    }
+
+    /* Main window box */
+    .window,
+    .heart-container {
+      max-width: 90%;
+      width: 400px;
+      /* Default width for desktop */
+      border: 2px solid #FFFFFF;
+      box-shadow: 4px 4px 0px black, -1px -1px 0px #FFFFFF inset;
+      background-color: #C0C0C0;
+      margin-bottom: 20px;
+    }
+
+    /* Window title bar */
+    .title-bar1,
+    .title-bar2 {
+      background-color: #000080;
+      color: white;
+      padding: 3px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid black;
+    }
+
+    .title-bar2 {
+      background-color: #ff8af9;
+    }
+
+    .title-bar-text {
+      margin-left: 5px;
+    }
+
+    /* Close button */
+    .close-btn {
+      background-color: #C0C0C0;
+      border: 1px solid black;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 5px;
+      cursor: pointer;
+    }
+
+    .close-btn div {
+      width: 10px;
+      height: 2px;
+      background-color: black;
+      transform: rotate(45deg);
+      position: relative;
+    }
+
+    .close-btn div::before {
+      content: '';
+      width: 10px;
+      height: 2px;
+      background-color: black;
+      position: absolute;
+      transform: rotate(90deg);
+    }
+
+    /* Window content */
+    .content,
+    .heart-content {
+      padding: 20px;
+      text-align: center;
+      background-color: white;
+      color: black;
+      border-left: 2px solid black;
+      border-top: 2px solid black;
+      border-right: 2px solid #FFFFFF;
+      border-bottom: 2px solid #FFFFFF;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Heart Button */
+    .heart-button {
+      background-color: #FF69B4;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-family: W95;
+    }
+
+    /* Heart Image Styling */
+    .heart {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      animation: floatUp 3s ease-in-out forwards;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-600px) rotate(360deg);
+      }
+    }
+
+    .heart-counter {
+      font-size: 20px;
+      font-weight: bold;
+      color: #FF69B4;
+      margin-bottom: 10px;
+    }
+
+    /* Canvas Styles */
+    .noise {
+      z-index: 1;
+      /* Ensure the canvas is behind everything else */
+      position: fixed;
+      /* Make the canvas fixed to the viewport */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      /* Allow clicks to pass through the canvas */
+      opacity: .025;
+      /* Adjust the opacity as needed */
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+
+      .window,
+      .heart-container {
+        width: 90%;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+
+      .title-bar1,
+      .title-bar2 {
+        font-size: 14px;
+        padding: 5px;
+      }
+
+      .heart-button {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+
+      .heart-counter {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="noise" class="noise"></canvas>
+
+  <!-- First Window -->
+  <div class="window">
+    <div class="title-bar1">
+      <div class="title-bar-text">Happy Birthday My Love <3 !!</div>
+          <div class="close-btn" onclick="location.href = 'index.html';">
+            <div></div>
+          </div>
+      </div>
+      <div class="content">
+        <img src="https://s3.us-east-2.amazonaws.com/justteastudios.com/cake.gif" alt="Birthday Cake">
+      </div>
+    </div>
+
+    <!-- Second Window with Heart Counter -->
+    <div class="heart-container">
+      <div class="title-bar2">
+        <div class="title-bar-text">Have Some Hearts!!</div>
+        <div>
+          <div></div>
+        </div>
+      </div>
+      <div class="heart-content">
+        <div class="heart-counter"><span id="heart-count">0</span></div>
+        <button class="heart-button" onclick="incrementHearts()">+1</button>
+      </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="background-music" src="https://s3.us-east-2.amazonaws.com/justteastudios.com/Heart+To+Heart.mp3" loop
+      volume="0.1"></audio>
+
+    <script>
+      let heartCount = 0; // Initialize heart count
+      const audioElement = document.getElementById('background-music');
+
+      function incrementHearts() {
+        const numHearts = 1; // Number of hearts to create per click
+
+        for (let i = 0; i < numHearts; i++) {
+          // Create a new heart element
+          const heart = document.createElement("img");
+          heart.src = "https://s3.us-east-2.amazonaws.com/justteastudios.com/Heart.png";
+          heart.classList.add("heart");
+
+          // Randomize the heart's starting position
+          heart.style.left = Math.random() * 100 + "%";
+          heart.style.bottom = "0px";
+
+          // Append the heart to the body (entire page)
+          document.body.appendChild(heart);
+
+          // Remove the heart after the animation
+          setTimeout(() => {
+            heart.remove();
+          }, 3000);
+        }
+
+        // Update heart count
+        heartCount += numHearts;
+        document.getElementById('heart-count').textContent = heartCount;
+
+        // Play the audio if not already playing
+        if (audioElement.paused) {
+          audioElement.play();
+        }
+      }
+
+      const noise = () => {
+        let canvas, ctx;
+
+        let wWidth, wHeight;
+
+        let noiseData = [];
+        let frame = 0;
+
+        let loopTimeout;
+
+
+        // Create Noise
+        const createNoise = () => {
+          const idata = ctx.createImageData(wWidth, wHeight);
+          const buffer32 = new Uint32Array(idata.data.buffer);
+          const len = buffer32.length;
+
+          for (let i = 0; i < len; i++) {
+            if (Math.random() < 0.5) {
+              buffer32[i] = 0xff000000;
+            }
+          }
+
+          noiseData.push(idata);
+        };
+
+
+        // Play Noise
+        const paintNoise = () => {
+          if (frame === 9) {
+            frame = 0;
+          } else {
+            frame++;
+          }
+
+          ctx.putImageData(noiseData[frame], 0, 0);
+        };
+
+
+        // Loop
+        const loop = () => {
+          paintNoise(frame);
+
+          loopTimeout = window.setTimeout(() => {
+            window.requestAnimationFrame(loop);
+          }, (1000 / 25));
+        };
+
+
+        // Setup
+        const setup = () => {
+          wWidth = window.innerWidth;
+          wHeight = window.innerHeight;
+
+          canvas.width = wWidth;
+          canvas.height = wHeight;
+
+          for (let i = 0; i < 10; i++) {
+            createNoise();
+          }
+
+          loop();
+        };
+
+
+        // Reset
+        let resizeThrottle;
+        const reset = () => {
+          window.addEventListener('resize', () => {
+            window.clearTimeout(resizeThrottle);
+
+            resizeThrottle = window.setTimeout(() => {
+              window.clearTimeout(loopTimeout);
+              setup();
+            }, 200);
+          }, false);
+        };
+
+
+        // Init
+        const init = (() => {
+          canvas = document.getElementById('noise');
+          ctx = canvas.getContext('2d');
+
+          setup();
+        })();
+      };
+
+      noise();
+    </script>
+
+</body>
+
+</html>
